@@ -833,3 +833,188 @@ body {
     background: rgba(16, 185, 129, 0.08);
 }
 
+/* Light Theme Variables */
+[data-theme="light"] {
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(0, 0, 0, 0.08);
+    --card-hover-border: rgba(26, 115, 232, 0.4);
+    --card-selected-border: #1a73e8;
+    --card-selected-bg: rgba(26, 115, 232, 0.05);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] .header-brand h1 {
+    background: linear-gradient(135deg, #0f172a 30%, #1e293b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .search-box input {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .search-box input:focus {
+    background: rgba(0, 0, 0, 0.01);
+    border-color: rgba(26, 115, 232, 0.5);
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+}
+
+[data-theme="light"] .search-icon {
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .filter-pill {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .filter-pill:hover {
+    background: rgba(0, 0, 0, 0.02);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .filter-pill.active {
+    background: rgba(26, 115, 232, 0.08);
+    color: #1a73e8;
+    border-color: rgba(26, 115, 232, 0.4);
+}
+
+[data-theme="light"] .btn-secondary {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .logo-container {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .skeleton-date, 
+[data-theme="light"] .skeleton-card {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .skeleton-date::after, 
+[data-theme="light"] .skeleton-card::after {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 0, 0, 0.02) 20%, 
+        rgba(0, 0, 0, 0.04) 60%, 
+        transparent 100%
+    );
+}
+
+[data-theme="light"] .card-copy-btn {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .card-copy-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .custom-checkbox {
+    border: 2px solid var(--text-secondary);
+}
+
+[data-theme="light"] .twitter-drawer {
+    background: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .drawer-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .composer-container {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .hashtag-tag {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .hashtag-tag:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .hashtag-tag.active {
+    background: rgba(29, 161, 242, 0.08);
+    border-color: rgba(29, 161, 242, 0.3);
+}
+
+[data-theme="light"] .close-btn {
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .close-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Theme Toggle Button Styling */
+.theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .theme-toggle-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .theme-toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sun-icon {
+    display: none !important;
+}
+
+[data-theme="light"] .moon-icon {
+    display: block !important;
+}
+
+[data-theme="light"] .card-body code {
+    background: rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+}
+
+[data-theme="light"] .card-body a {
+    color: var(--color-gcp-blue);
+}
+
+[data-theme="light"] .card-body a:hover {
+    color: #1a73e8;
+}
+
+

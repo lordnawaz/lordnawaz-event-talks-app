@@ -21,6 +21,7 @@ const elements = {
     retryBtn: document.getElementById('retry-btn'),
     emptyState: document.getElementById('empty-state'),
     notesFeed: document.getElementById('notes-feed'),
+    themeToggleBtn: document.getElementById('theme-toggle-btn'),
     
     // Twitter Drawer Elements
     twitterDrawer: document.getElementById('twitter-drawer'),
@@ -101,6 +102,9 @@ function setupEventListeners() {
     
     // Tweet Button
     elements.tweetBtn.addEventListener('click', openTwitterIntent);
+    
+    // Theme Toggle Button
+    elements.themeToggleBtn.addEventListener('click', toggleTheme);
 }
 
 // Helper to sanitize / strip extra spacing
@@ -475,4 +479,13 @@ function exportToCSV() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+// Toggle page color theme between Dark and Light mode
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
 }
