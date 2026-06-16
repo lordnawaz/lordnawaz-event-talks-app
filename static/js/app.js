@@ -11,6 +11,7 @@ let appState = {
 // DOM Elements
 const elements = {
     refreshBtn: document.getElementById('refresh-btn'),
+    exportCsvBtn: document.getElementById('export-csv-btn'),
     searchInput: document.getElementById('search-input'),
     typeFilters: document.getElementById('type-filters'),
     updatesCount: document.getElementById('updates-count'),
@@ -42,6 +43,9 @@ function setupEventListeners() {
     // Refresh & Retry
     elements.refreshBtn.addEventListener('click', () => fetchReleaseNotes(true));
     elements.retryBtn.addEventListener('click', () => fetchReleaseNotes(true));
+    
+    // Export CSV
+    elements.exportCsvBtn.addEventListener('click', exportToCSV);
     
     // Search
     elements.searchInput.addEventListener('input', (e) => {
@@ -219,7 +223,29 @@ function renderFeed() {
             cardMeta.className = 'card-meta';
             
             const badgeClass = `badge badge-${update.type.toLowerCase()}`;
-            cardMeta.innerHTML = `<span class="${badgeClass}">${update.type}</span>`;
+            cardMeta.innerHTML = `
+                <span class="${badgeClass}">${update.type}</span>
+                <button class="card-copy-btn" title="Copy release note text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+            `;
+            
+            const copyBtn = cardMeta.querySelector('.card-copy-btn');
+            copyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(update.text).then(() => {
+                    copyBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    `;
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        `;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                });
+            });
             
             // Body
             const cardBody = document.createElement('div');
@@ -406,4 +432,47 @@ function showSection(section) {
 function showError(message) {
     elements.errorMessage.textContent = message;
     showSection('error');
+}
+
+// Export Filtered Release Notes to CSV
+function exportToCSV() {
+    if (!appState.allEntries || appState.allEntries.length === 0) return;
+    
+    const query = appState.searchQuery;
+    const filterType = appState.activeTypeFilter;
+    
+    // CSV headers
+    let csvRows = ['"Date","Type","Description","Source URL"'];
+    
+    appState.allEntries.forEach(entry => {
+        entry.updates.forEach(update => {
+            const matchesType = (filterType === 'all' || update.type.toLowerCase() === filterType.toLowerCase());
+            const matchesSearch = !query || 
+                update.type.toLowerCase().includes(query) || 
+                update.text.toLowerCase().includes(query) || 
+                entry.date.toLowerCase().includes(query);
+                
+            if (matchesType && matchesSearch) {
+                // Escape quotes inside fields
+                const cleanDate = entry.date.replace(/"/g, '""');
+                const cleanType = update.type.replace(/"/g, '""');
+                const cleanText = update.text.replace(/"/g, '""');
+                const cleanUrl = (entry.url || '').replace(/"/g, '""');
+                
+                csvRows.push(`"${cleanDate}","${cleanType}","${cleanText}","${cleanUrl}"`);
+            }
+        });
+    });
+    
+    // Create download link
+    const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    
+    const dateStr = new Date().toISOString().slice(0, 10);
+    link.setAttribute("download", `bigquery_release_notes_${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
