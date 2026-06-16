@@ -7,6 +7,7 @@
     --card-hover-border: rgba(59, 130, 246, 0.4);
     --card-selected-border: #3b82f6;
     --card-selected-bg: rgba(59, 130, 246, 0.08);
+    --card-hover-bg: rgba(30, 41, 59, 0.5);
     
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
@@ -345,7 +346,7 @@ body {
 
 .update-card:hover {
     border-color: var(--card-hover-border);
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--card-hover-bg);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -842,6 +843,7 @@ body {
     --card-hover-border: rgba(26, 115, 232, 0.4);
     --card-selected-border: #1a73e8;
     --card-selected-bg: rgba(26, 115, 232, 0.05);
+    --card-hover-bg: rgba(255, 255, 255, 0.9);
     
     --text-primary: #0f172a;
     --text-secondary: #475569;
