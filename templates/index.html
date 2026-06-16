@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigQuery Release Hub</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Style link -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" type="image/png" href="https://www.gstatic.com/images/branding/product/1x/bigquery_64dp.png">
+</head>
+<body>
+    <div class="app-background"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="logo-container">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/bigquery_64dp.png" alt="BigQuery Logo" class="bq-logo">
+                </div>
+                <div>
+                    <h1>BigQuery Release Hub</h1>
+                    <p class="subtitle">Stay updated with the latest BigQuery developments</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-input" placeholder="Search updates...">
+                </div>
+                <button id="refresh-btn" class="btn btn-primary" title="Refresh Release Notes">
+                    <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <div class="filter-group" id="type-filters">
+                <button class="filter-pill active" data-type="all">All Updates</button>
+                <button class="filter-pill" data-type="Feature">Features</button>
+                <button class="filter-pill" data-type="Issue">Issues</button>
+                <button class="filter-pill" data-type="Deprecation">Deprecations</button>
+                <button class="filter-pill" data-type="Change">Changes</button>
+            </div>
+            <div class="stats-indicator" id="updates-count">Loading updates...</div>
+        </section>
+
+        <!-- Feed Section -->
+        <main class="feed-section">
+            <!-- Skeleton Loader -->
+            <div id="skeleton-loader" class="skeleton-container">
+                <div class="skeleton-date-group">
+                    <div class="skeleton-date"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+                <div class="skeleton-date-group">
+                    <div class="skeleton-date"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="error-container hidden">
+                <div class="error-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <h2>Failed to load release notes</h2>
+                <p id="error-message">Something went wrong while fetching the feed.</p>
+                <button id="retry-btn" class="btn btn-secondary">Try Again</button>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-container hidden">
+                <div class="empty-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                </div>
+                <h2>No updates found</h2>
+                <p>Try modifying your search query or filter settings.</p>
+            </div>
+
+            <!-- Content Feed -->
+            <div id="notes-feed" class="notes-feed"></div>
+        </main>
+
+        <!-- Floating Twitter Drawer -->
+        <div id="twitter-drawer" class="twitter-drawer">
+            <div class="drawer-header">
+                <div class="drawer-title">
+                    <svg class="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <h3>Draft Tweet</h3>
+                </div>
+                <button id="close-drawer-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="drawer-body">
+                <div class="composer-container">
+                    <textarea id="tweet-textarea" placeholder="What's happening?"></textarea>
+                    <div class="composer-options">
+                        <div class="hashtag-selector">
+                            <span class="option-label">Add Hashtags:</span>
+                            <div class="hashtags-list">
+                                <button class="hashtag-tag" data-tag="#BigQuery">#BigQuery</button>
+                                <button class="hashtag-tag" data-tag="#GoogleCloud">#GoogleCloud</button>
+                                <button class="hashtag-tag" data-tag="#GCP">#GCP</button>
+                                <button class="hashtag-tag" data-tag="#DataEngineering">#DataEng</button>
+                            </div>
+                        </div>
+                        <div class="character-count-wrapper">
+                            <span id="char-counter" class="char-counter">0/280</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="drawer-footer">
+                    <button id="copy-tweet-btn" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Copy Text</span>
+                    </button>
+                    <button id="tweet-btn" class="btn btn-twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        <span>Tweet this update</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
